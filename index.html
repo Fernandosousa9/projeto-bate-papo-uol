@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Uol</title>
+    <title>Bate Papo - UOL</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet"> 
@@ -14,23 +14,27 @@
     <link rel="stylesheet" href="css/reset.css">
 </head>
 <body>
-    <div class="topo">
-        <img id="logo" src="./images/logo.png" alt="Bate Papo UOL">
-        <ion-icon id="people" name="people"></ion-icon>
-    </div>
     <div class="conteudo">
-        <ul class="mensagens"></ul>
-    </div>
-    <div class="final">
-        <input id="text-box" class="text-box" type="text" name="Nome" placeholder="Escreva aqui..." size="10" /> 
-        <ion-icon id="plane" name="paper-plane-outline" onclick="adicionarMensagem()"></ion-icon>
+        <div>
+            <div id="topo">
+                <img src="images/logo.png" class="logo" alt="Logo Bate-Papo Uol">
+                <ion-icon name="people" id="people"></ion-icon>
+            </div>
+            <ul id="mensagens">
+            </ul>
+            <div id="final">
+                <div>
+                    <input type="text" id="message" placeholder="Escreva aqui...">
+                    <p id="mensagem-info">Enviando para Todos (Público)</p>
+                </div>
+                <ion-icon name="paper-plane-outline" id="enviar"></ion-icon>
+            </div>
+        </div>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
-    
     <script src="js/script.js"></script>
 </body>
 </html>
