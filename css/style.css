@@ -116,8 +116,8 @@ ion-icon {
     font-size: 14px;
     line-height: 20px;
     margin:4px 0px;
-    overflow-wrap: break-word;
 }
+
 /* cores das mensagens*/
 #messages li.status {
     background-color: #DCDCDC;
@@ -191,10 +191,10 @@ ion-icon {
 }
 
 #barra-lateral {
-    width: 249px;
+    width: 250px;
     height: 100%;
     top: 0;
-    right: -249px;
+    right: -250px;
     position: fixed;
     background-color: white;
     display: flex;
@@ -253,6 +253,16 @@ ion-icon {
 
 #usuarios {
     overflow-y: auto;
+}
+
+aside {
+    cursor: default;
+}
+
+#sair {
+    display: flex;
+    align-items: center;
+    margin-left: 13px;
 }
 
 .escondido {

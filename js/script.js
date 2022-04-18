@@ -15,6 +15,13 @@ const opcoes = document.getElementById("outro-container");
 const sobrepor = document.getElementById("sobrepor");
 const barralateral = document.getElementById("barra-lateral");
 
+//Botão de login
+function cliqueLogin() {
+    const nomeUsuario = document.getElementById("nomeUsuario").value;
+    solicitaNomeUsuario(nomeUsuario);
+    document.addEventListener("click", clique);
+}
+
 function clique(event) {
     let item;
     if (event.target.id !== "") {
@@ -33,14 +40,6 @@ function clique(event) {
             break;
     }
 }
-
-//Botão de login
-function cliqueLogin() {
-    const nomeUsuario = document.getElementById("nomeUsuario").value;
-    solicitaNomeUsuario(nomeUsuario);
-    document.addEventListener("click", clique);
-}
-
 
 //manda o nome do usuario
 function solicitaNomeUsuario(usuario) {
@@ -65,10 +64,10 @@ function carregaTela() {
 
 //esconde a tela de inicio
 function escondeTelaLogin() {
-    const loginScreen = document.getElementById("tela-inicial")
-    loginScreen.style.opacity = 0
+    const tela = document.getElementById("tela-inicial")
+    tela.style.opacity = 0
     setTimeout(function () {
-        loginScreen.classList.add("escondido")
+        tela.classList.add("escondido")
     }, 500)
 }
 
@@ -233,7 +232,7 @@ function mostraBarraLateral(event) {
 
 function ocultarBarraLateral(){
     sobrepor.classList.add("escondido")
-    barralateral.style.right = "-249px"
+    barralateral.style.right = "-250px"
     opcoes.classList.add("escondido");
 }
 
@@ -260,6 +259,11 @@ function atualizaEnvio() {
         envio.innerText = `Enviando para ${mensagemEnviar.to} (Reservadamente)`
 
     }
+}
+
+//Logout
+function sair(){
+    location.reload();
 }
 
 
