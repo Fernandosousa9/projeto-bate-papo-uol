@@ -11,6 +11,10 @@ const mensagemEnviar = {
 };
 let ultimaMensagem;
 
+const opcoes = document.getElementById("outro-container");
+const sobrepor = document.getElementById("sobrepor");
+const barralateral = document.getElementById("barra-lateral");
+
 function clique(event) {
     let item;
     if (event.target.id !== "") {
@@ -19,17 +23,11 @@ function clique(event) {
         item = event.target.parentNode.parentNode.id;
     }
     switch (item) {
-        case "people":
-            mostraBarraLateral(true);
-            break;
         case "usuarios":
             escolheUsuario(event.target.parentNode);
             break;
         case "privacidade":
             selecionarPrivacidade(event.target.parentNode);
-            break;
-        case "sobrepor":
-            mostraBarraLateral(false);
             break;
         default:
             break;
@@ -77,7 +75,7 @@ function escondeTelaLogin() {
 //loop que pega novas as mensasgens a cada 5s
 function mensagemLoop() {
     pegarMensagens()
-    setInterval(pegarMensagens, 5000);
+    setInterval(pegarMensagens, 3000);
 }
 
 //requisição de mensagem
@@ -227,20 +225,16 @@ function selecionarPrivacidade(privacidade) {
 
 //mostra a barra lateral
 function mostraBarraLateral(event) {
-    const opcoes = document.getElementById("outro-container");
-    const sobrepor = document.getElementById("sobrepor");
-    const barralateral = document.getElementById("barra-lateral");
+    opcoes.classList.remove("escondido");
+    sobrepor.classList.remove("escondido")
+    barralateral.style.right = "0";
+        
+}
 
-    if (event) {
-        opcoes.classList.remove("escondido");
-        sobrepor.classList.remove("escondido")
-        barralateral.style.right = "0";
-    } else {
-        sobrepor.classList.add("escondido")
-        barralateral.style.right = "-249px"
-        opcoes.classList.add("escondido");
-
-    }
+function ocultarBarraLateral(){
+    sobrepor.classList.add("escondido")
+    barralateral.style.right = "-249px"
+    opcoes.classList.add("escondido");
 }
 
 //seleciona participante
