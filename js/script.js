@@ -22,7 +22,7 @@ function clique(event) {
         case "people":
             mostraBarraLateral(true);
             break;
-        case "participants":
+        case "usuarios":
             escolheUsuario(event.target.parentNode);
             break;
         case "privacidade":
@@ -43,17 +43,6 @@ function cliqueLogin() {
     document.addEventListener("click", clique);
 }
 
-//verifica se o nome digitado já existe
-function checarNomeDigitado(evt) {
-    const login = document.getElementById("entrar")
-    if (evt.target.value === undefined || evt.target.value === "") {
-        login.classList.remove("active")
-    } else {
-        login.classList.add("active")
-        
-    }
-    document.querySelector("#tela-inicial .aviso").classList.add("soft-hidden");
-}
 
 //manda o nome do usuario
 function solicitaNomeUsuario(usuario) {
@@ -74,13 +63,6 @@ function carregaTela() {
     carregaElementos.forEach(element => {
         element.classList.remove("escondido")
     });
-}
-
-//Tratar caso sucesso
-function tratarSucesso() {
-    mensagemEnviar.from = nome.name;
-    escondeTelaLogin();
-    mensagemLoop();
 }
 
 //esconde a tela de inicio
@@ -117,23 +99,23 @@ function renderMessages(response) {
                     message = `
                         <li class="status">
                         <span class="time">(${arrayMensagem[i].time})</span> 
-                        <span class="participant">${arrayMensagem[i].from}</span> 
+                        <span class="usuario">${arrayMensagem[i].from}</span> 
                         ${arrayMensagem[i].text}</li>`
                     mensagens += message
                     break;
                 case "message":
                     message = `
                         <li><span class="time">(${arrayMensagem[i].time})</span> 
-                        <span class="participant">${arrayMensagem[i].from}</span> para 
-                        <span class="participant">${arrayMensagem[i].to}</span>: ${arrayMensagem[i].text}</li>`
+                        <span class="usuario">${arrayMensagem[i].from}</span> para 
+                        <span class="usuario">${arrayMensagem[i].to}</span>: ${arrayMensagem[i].text}</li>`
                     mensagens += message
                     break;
                 case "private_message":
                     if (arrayMensagem[i].to === "Todos" || arrayMensagem[i].to === nome.name || arrayMensagem[i].from === nome.name) {
                         message = `
                             <li class="private"><span class="time">(${arrayMensagem[i].time})</span> 
-                            <span class="participant">${arrayMensagem[i].from}</span>
-                            reservadamente para <span class="participant">${arrayMensagem[i].to}</span>: 
+                            <span class="usuario">${arrayMensagem[i].from}</span>
+                            reservadamente para <span class="usuario">${arrayMensagem[i].to}</span>: 
                             ${arrayMensagem[i].text}</li>`
                         mensagens += message
                     }
@@ -147,4 +129,162 @@ function renderMessages(response) {
         ultimaMensagem = arrayMensagem
         messages.scrollTop = messages.scrollHeight;
     }
+}
+
+//ver os participantes que entraram
+function usuariosLoop() {
+    pegarUsuarios()
+    setInterval(pegarUsuarios, 5000);
+}
+
+//pega a lista de participantes
+function pegarUsuarios() {
+    const usuarios = axios.get(url);
+    usuarios.then(renderUsuarios);
+}
+
+//renderiza os participantes
+function renderUsuarios(response) {
+    const arrayUsuarios = response.data
+    usuariosOnline(arrayUsuarios);
+    let participant;
+    let addclass = "check escondido";
+    if (mensagemEnviar.to === "Todos") {
+        addclass = "check"
+    }
+    let userHTML = `
+    <li>
+        <div class="click"></div>
+        <ion-icon name="people"></ion-icon>
+        <span class="usuario">Todos</span>
+        <p class="${addclass}"><ion-icon name="checkmark"></ion-icon></p>
+    </li>`
+    for (let i = 0; i < arrayUsuarios.length; i++) {
+        if (arrayUsuarios[i].name === mensagemEnviar.to) {
+            addclass = "check"
+        } else {
+            addclass = "check escondido"
+        }
+        participant = `
+                <li>
+                    <div class="click"></div>
+                    <ion-icon name="person-circle"></ion-icon>
+                    <span class="usuario">${arrayUsuarios[i].name}</span>
+                    <p class="${addclass}"><ion-icon name="checkmark"></ion-icon></p>
+                </li>`
+        userHTML += participant;
+    }
+    const usuarios = document.getElementById("usuarios");
+    usuarios.innerHTML = userHTML;
+}
+//ver os participantes que estão online
+function usuariosOnline(arrayUsuarios) {
+    const continuaConectado = arrayUsuarios.find(usuarios => usuarios.name === mensagemEnviar.to);
+    if (continuaConectado === undefined) {
+        mensagemEnviar.to = "Todos"
+        mensagemEnviar.type = "message"
+        atualizaEnvio();
+    }
+}
+
+//manter usuário online
+function manterOnline() {
+    setInterval(function () {
+        axios.post(urlStatus, nome);
+    }, 5000);
+}
+
+//enviar menssagem
+function enviarMensagem() {
+    const mensagemDigitada = document.getElementById("message")
+    if (mensagemDigitada.value !== "" && mensagemDigitada.value !== undefined) {
+        mensagemEnviar.text = mensagemDigitada.value
+        promise = axios.post(urlMessages, mensagemEnviar);
+        promise.then(pegarMensagens);
+        promise.catch(function () {
+            window.location.reload()
+        });
+        mensagemDigitada.value = "";
+        mensagemDigitada.focus();
+    }
+}
+
+
+//seleciona a privacidade
+function selecionarPrivacidade(privacidade) {
+    const checa = document.querySelectorAll("#privacidade li p.check")
+    if (privacidade.innerText === "Reservadamente") {
+        mensagemEnviar.type = "private_message";
+        checa[0].classList.add("escondido")
+        checa[1].classList.remove("escondido")
+    } else {
+        mensagemEnviar.type = "message";
+        checa[1].classList.add("escondido")
+        checa[0].classList.remove("escondido")
+    }
+    atualizaEnvio()
+}
+
+//mostra a barra lateral
+function mostraBarraLateral(event) {
+    const opcoes = document.getElementById("outro-container");
+    const sobrepor = document.getElementById("sobrepor");
+    const barralateral = document.getElementById("barra-lateral");
+
+    if (event) {
+        opcoes.classList.remove("escondido");
+        sobrepor.classList.remove("escondido")
+        barralateral.style.right = "0";
+    } else {
+        sobrepor.classList.add("escondido")
+        barralateral.style.right = "-249px"
+        opcoes.classList.add("escondido");
+
+    }
+}
+
+//seleciona participante
+function escolheUsuario(user) {
+    mensagemEnviar.to = user.innerText;
+    atualiza(user);
+    atualizaEnvio();
+}
+
+//atualiza checagem
+function atualiza(user) {
+    const participante = user.parentNode.querySelector("li p.check:not(.escondido)")
+    participante.classList.add("escondido")
+    user.querySelector("p.check").classList.remove("escondido");
+}
+
+//seleciona o tipo de envio da privacidade
+function atualizaEnvio() {
+    const envio = document.getElementById("mensagem-info")
+    if (mensagemEnviar.type == "message") {
+        envio.innerText = `Enviando para ${mensagemEnviar.to} (Público)`
+    } else {
+        envio.innerText = `Enviando para ${mensagemEnviar.to} (Reservadamente)`
+
+    }
+}
+
+
+//Tratar caso sucesso
+function tratarSucesso() {
+    mensagemEnviar.from = nome.name;
+    escondeTelaLogin();
+    mensagemLoop();
+    usuariosLoop()
+    manterOnline();
+}
+
+
+//caso erro
+function tratarErro(error) {
+    carregaTela()
+    const nomeUsuarioDigitado = document.getElementById("nomeUsuario");
+    nomeUsuarioDigitado.value = "";
+    nomeUsuarioDigitado.focus();
+    document.getElementById("entrar").classList.remove("active")
+    document.querySelector("#tela-inicial .aviso").classList.remove("esconde");
 }

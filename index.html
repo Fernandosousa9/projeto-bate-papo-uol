@@ -18,7 +18,7 @@
         <img src="images/logo.png" class="logo" alt="Logo Bate-Papo Uol">
         <img src="images/loader.gif" class="loader escondido" alt="Entrando na sala...">
         <span class="escondido">Entrando...</span>
-        <span class="aviso soft-hidden">Já existe um usuário com esse nome. Por favor, escolha outro.</span>
+        <span class="aviso esconde">Já existe um usuário com esse nome. Por favor, escolha outro.</span>
         <input type="text" id="nomeUsuario" placeholder="Digite seu nome">
         <button id="entrar" onclick="cliqueLogin()">Entrar</button>
     </div>
@@ -38,7 +38,25 @@
                 <ion-icon name="paper-plane-outline" id="enviar" onclick="enviarMensagem()"></ion-icon>
             </div>
         </div>
-        
+        <div id="outro-container" class="escondido">
+            <div id="sobrepor" class="escondido"></div>
+            <div class="barra-lateral" id="barra-lateral">
+                <p>Escolha um usuario para enviar mensagem:</p>
+                <ul id="usuarios"></ul>
+                <p>Escolha a visibilidade:</p>
+                <ul id="privacidade">
+                    <li>
+                        <div class="click"></div>
+                        <ion-icon name="lock-open"></ion-icon>Público<p class="check"><ion-icon name="checkmark"></ion-icon></p>
+                    </li>
+                    <li>
+                        <div class="click"></div>
+                        <ion-icon name="lock-closed"></ion-icon>Reservadamente<p class="check escondido"><ion-icon name="checkmark"></ion-icon></p>
+                        </ion-icon>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

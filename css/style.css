@@ -45,7 +45,7 @@ ion-icon {
     text-align: center;
 }
 
-#tela-inicial span.soft-hidden {
+#tela-inicial span.esconde {
     visibility: hidden;
 }
 
@@ -64,19 +64,24 @@ ion-icon {
 }
 
 #entrar {
-    width: 109px;
+    background: #E7E7E7;
+    width: 110px;
     height: 45px;
     font-size: 18px;
-    background: #E7E7E7;
-    color: #696969;
-    border-radius: 9px;
+    border-radius: 8px;
     border: none;
     transition: .3s;
+    color: #696969;
 }
 
-#entrar.active {
-    background: #ff5927;
+#entrar:hover {
+    background-color: #ff5927;
     color: #FFFFFF;
+}
+
+#entrar:active {
+    transform: translate(1px, 2px);
+    transition: .3s;
 }
 
 #topo{
@@ -117,15 +122,18 @@ ion-icon {
 #messages li.status {
     background-color: #DCDCDC;
 }
+
 #messages li.private {
     background-color: #FFDEDE;
 }
+
 #messages li span.time {
     color: #AAAAAA;
 }
+
 /* */
 
-#messages li span.participant {
+#messages li span.usuario {
     font-weight: bold;
 }
 
@@ -143,11 +151,13 @@ ion-icon {
     padding: 0px 17px;
     z-index: 1;
 }
+
 #final div {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
+
 #final input {
     width: 70%;
     height: 30px;
@@ -156,6 +166,7 @@ ion-icon {
     color: #000000;
     border: none;
 }
+
 #final input::placeholder {
     color: #000000;
     font-style: italic;
@@ -168,3 +179,82 @@ ion-icon {
     color: #333333;
 }
 
+#sobrepor{
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 2;   
+}
+
+#barra-lateral {
+    width: 249px;
+    height: 100%;
+    top: 0;
+    right: -249px;
+    position: fixed;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    font-size: 16px;
+    padding: 0px 0px;
+    z-index: 3;
+}
+
+#barra-lateral > p {
+    text-align: center;
+    font-weight: bold;
+    margin: 25px;
+    line-height: 19px;
+}
+
+#barra-lateral ion-icon {
+    font-size: 25px;
+    margin: 8px;
+}
+
+#barra-lateral p.check {
+    width: 13px;
+    height: 11px;
+    position: absolute;
+    right: 28px;
+    bottom: 31px;
+}
+
+.check > ion-icon {
+    font-size: 3px;
+    color: #28BB25;
+}
+
+#barra-lateral li {
+    display: flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 0px 10px;
+    position: relative;
+}
+
+#barra-lateral li p.usuario {
+    width: 160px;
+}
+
+#barra-lateral li div.click{
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+#usuarios {
+    overflow-y: auto;
+}
+
+.escondido {
+    display: none;
+}
