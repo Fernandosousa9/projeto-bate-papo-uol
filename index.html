@@ -14,22 +14,31 @@
     <link rel="stylesheet" href="css/reset.css">
 </head>
 <body>
+    <div id="tela-inicial" class="">
+        <img src="images/logo.png" class="logo" alt="Logo Bate-Papo Uol">
+        <img src="images/loader.gif" class="loader escondido" alt="Entrando na sala...">
+        <span class="escondido">Entrando...</span>
+        <span class="aviso soft-hidden">Já existe um usuário com esse nome. Por favor, escolha outro.</span>
+        <input type="text" id="nomeUsuario" placeholder="Digite seu nome">
+        <button id="entrar" onclick="cliqueLogin()">Entrar</button>
+    </div>
     <div class="conteudo">
-        <div>
+        <div id="container">
             <div id="topo">
                 <img src="images/logo.png" class="logo" alt="Logo Bate-Papo Uol">
                 <ion-icon name="people" id="people"></ion-icon>
             </div>
-            <ul id="mensagens">
+            <ul id="messages">
             </ul>
             <div id="final">
                 <div>
                     <input type="text" id="message" placeholder="Escreva aqui...">
-                    <p id="mensagem-info">Enviando para Todos (Público)</p>
+                    <span id="mensagem-info">Enviando mensagem para Todos (Público)</span>
                 </div>
-                <ion-icon name="paper-plane-outline" id="enviar"></ion-icon>
+                <ion-icon name="paper-plane-outline" id="enviar" onclick="enviarMensagem()"></ion-icon>
             </div>
         </div>
+        
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

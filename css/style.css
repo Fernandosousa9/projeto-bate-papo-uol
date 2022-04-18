@@ -5,38 +5,105 @@ body {
 }
 
 ion-icon {
-    font-size: 44px;
+    font-size: 40px;
     margin-right: 30px;
 }
 
-#topo {
-    background: #FFFFFF;
+#tela-inicial {
+    background-color: #FFFFFF;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: .5s;
+    z-index: 3;
+}
+
+#tela-inicial.escondido {
+    display: none;
+}
+
+#tela-inicial .logo {
+    width: 130px;
+    height: 92px;
+    margin: 72px 0px 50px 0px;    
+}
+
+#tela-inicial .loader {
+    width: 150px;
+    margin-bottom: 20px;
+}
+
+#tela-inicial .aviso {
+    font-size: 20px;
+    color: rgb(255, 92, 92);
+    margin: 0px 0px 20px 0px;
+    text-align: center;
+}
+
+#tela-inicial span.soft-hidden {
+    visibility: hidden;
+}
+
+#tela-inicial input {
+    width: 260px;
+    height: 54px;
+    font-size: 18px;
+    border: 1px solid #D7D7D7;
+    border-radius: 4px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+#tela-inicial input::placeholder {
+    color: #AEAEAE;
+}
+
+#entrar {
+    width: 109px;
+    height: 45px;
+    font-size: 18px;
+    background: #E7E7E7;
+    color: #696969;
+    border-radius: 9px;
+    border: none;
+    transition: .3s;
+}
+
+#entrar.active {
+    background: #ff5927;
+    color: #FFFFFF;
+}
+
+#topo{
+    position: fixed;
     width: 100%;
     height: 80px;
-    position: fixed;
     left: 0px;
     top: 0px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0px 22px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
     z-index: 1;
 }
-
 #topo .logo{
     width: 75px;
     height: 53px;
 }
 
-#mensagens{
-    width: 100%;
-    height: 15%;
+#messages{
+    height: calc(100vh - 160px);
     margin: 80px 0px;
     overflow-y: scroll;
 }
-
-#mensagens li {
+#messages li {
     background-color: #FFFFFF;
     width: 100%;
     border-radius: 2px;
@@ -44,21 +111,21 @@ ion-icon {
     font-size: 14px;
     line-height: 20px;
     margin:4px 0px;
+    overflow-wrap: break-word;
 }
-
-#mensagens li.status {
+/* cores das mensagens*/
+#messages li.status {
     background-color: #DCDCDC;
 }
-
-#mensagens li.private {
+#messages li.private {
     background-color: #FFDEDE;
 }
-
-#mensagens li span.time {
+#messages li span.time {
     color: #AAAAAA;
 }
+/* */
 
-#mensagens li span.participant {
+#messages li span.participant {
     font-weight: bold;
 }
 
@@ -76,15 +143,13 @@ ion-icon {
     padding: 0px 17px;
     z-index: 1;
 }
-
 #final div {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
-
 #final input {
-    width: 60%;
+    width: 70%;
     height: 30px;
     font-size: 18px;
     padding-right: 15px;    
@@ -96,9 +161,10 @@ ion-icon {
     font-style: italic;
 }
 
-#final p {
+#final span {
+    margin-top: 10px;
     font-size: 14px;
     font-weight: 300;
     color: #333333;
-    margin-top: 10px;
 }
+

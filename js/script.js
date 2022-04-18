@@ -11,59 +11,140 @@ const mensagemEnviar = {
 };
 let ultimaMensagem;
 
-let mensagens = [];
-
-//console.log(pegarMensagem());
-pegarMensagem();
-
-
-
-function pegarMensagem(){
-    const promise = axios.get("https://mock-api.driven.com.br/api/v6/uol/participants");
-
-    //callback
-    promise.then(carregarDados);
-}
-
-function carregarDados(response){
-    mensagens = response.data;
-    renderizarMensagens();
-}
-
-function renderizarMensagens(){
-    const ulMensagens = document.querySelector(".mensagens");
-    ulMensagens.innerHTML = "";
-
-    for(let i = 0; i < mensagens.length; i++){
-        ulMensagens.innerHTML += `
-        <li>
-            ${mensagens[i].name}
-        </li>
-        `;
+function clique(event) {
+    let item;
+    if (event.target.id !== "") {
+        item = event.target.id;
+    } else if (event.target.classList.contains("click")) {
+        item = event.target.parentNode.parentNode.id;
+    }
+    switch (item) {
+        case "people":
+            mostraBarraLateral(true);
+            break;
+        case "participants":
+            escolheUsuario(event.target.parentNode);
+            break;
+        case "privacidade":
+            selecionarPrivacidade(event.target.parentNode);
+            break;
+        case "sobrepor":
+            mostraBarraLateral(false);
+            break;
+        default:
+            break;
     }
 }
 
-function adicionarMensagem(){
-    const name = document.querySelector(".text-box").value;
-
-    const novaMensagem = {
-        name: name,
-    };
-
-    const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", novaMensagem);
-
-    promise.then(tratarSucesso);
-
-    promise.catch(tratarFalha);
+//Botão de login
+function cliqueLogin() {
+    const nomeUsuario = document.getElementById("nomeUsuario").value;
+    solicitaNomeUsuario(nomeUsuario);
+    document.addEventListener("click", clique);
 }
 
-function tratarFalha(){
-    alert("Deu ruim");
-    console.log(error.response);
+//verifica se o nome digitado já existe
+function checarNomeDigitado(evt) {
+    const login = document.getElementById("entrar")
+    if (evt.target.value === undefined || evt.target.value === "") {
+        login.classList.remove("active")
+    } else {
+        login.classList.add("active")
+        
+    }
+    document.querySelector("#tela-inicial .aviso").classList.add("soft-hidden");
 }
 
-function tratarSucesso(){
-    alert("Mensagem enviada com sucesso");
+//manda o nome do usuario
+function solicitaNomeUsuario(usuario) {
+    nome.name = usuario
+    const nomeUsuario = axios.post(url, nome);
+    nomeUsuario.then(function () { tratarSucesso() });
+    nomeUsuario.catch(tratarErro)
+    carregaTela();
 }
 
-promise.then(pegarMensagem);
+//carrega a tela após login
+function carregaTela() {
+    elementosIniciais = document.querySelectorAll("#tela-inicial > *:not(.logo, .escondido)")
+    carregaElementos = document.querySelectorAll("#tela-inicial > .escondido:not(.logo)")
+    elementosIniciais.forEach(element => {
+        element.classList.add("escondido")
+    });
+    carregaElementos.forEach(element => {
+        element.classList.remove("escondido")
+    });
+}
+
+//Tratar caso sucesso
+function tratarSucesso() {
+    mensagemEnviar.from = nome.name;
+    escondeTelaLogin();
+    mensagemLoop();
+}
+
+//esconde a tela de inicio
+function escondeTelaLogin() {
+    const loginScreen = document.getElementById("tela-inicial")
+    loginScreen.style.opacity = 0
+    setTimeout(function () {
+        loginScreen.classList.add("escondido")
+    }, 500)
+}
+
+//loop que pega novas as mensasgens a cada 5s
+function mensagemLoop() {
+    pegarMensagens()
+    setInterval(pegarMensagens, 5000);
+}
+
+//requisição de mensagem
+function pegarMensagens() {
+    const promise = axios.get(urlMessages);
+    promise.then(renderMessages);
+}
+
+//renderiza mensagem
+function renderMessages(response) {
+    let mensagens = ""
+    let message;
+    const arrayMensagem = response.data
+    const mensagensNovas = (JSON.stringify(arrayMensagem) !== JSON.stringify(ultimaMensagem))
+    if (ultimaMensagem === undefined || mensagensNovas) {
+        for (let i = 0; i < arrayMensagem.length; i++) {
+            switch (arrayMensagem[i].type) {
+                case "status":
+                    message = `
+                        <li class="status">
+                        <span class="time">(${arrayMensagem[i].time})</span> 
+                        <span class="participant">${arrayMensagem[i].from}</span> 
+                        ${arrayMensagem[i].text}</li>`
+                    mensagens += message
+                    break;
+                case "message":
+                    message = `
+                        <li><span class="time">(${arrayMensagem[i].time})</span> 
+                        <span class="participant">${arrayMensagem[i].from}</span> para 
+                        <span class="participant">${arrayMensagem[i].to}</span>: ${arrayMensagem[i].text}</li>`
+                    mensagens += message
+                    break;
+                case "private_message":
+                    if (arrayMensagem[i].to === "Todos" || arrayMensagem[i].to === nome.name || arrayMensagem[i].from === nome.name) {
+                        message = `
+                            <li class="private"><span class="time">(${arrayMensagem[i].time})</span> 
+                            <span class="participant">${arrayMensagem[i].from}</span>
+                            reservadamente para <span class="participant">${arrayMensagem[i].to}</span>: 
+                            ${arrayMensagem[i].text}</li>`
+                        mensagens += message
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        const messages = document.getElementById("messages");
+        messages.innerHTML = mensagens;
+        ultimaMensagem = arrayMensagem
+        messages.scrollTop = messages.scrollHeight;
+    }
+}
